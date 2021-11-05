@@ -31,4 +31,4 @@ def binomial(n, p, size):
     # plt.show()
     # return cavans
 
-binomial(10, 0.5, 10000)
+# binomial(10, 0.5, 10000)

@@ -14,17 +14,17 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout
 from CentralLimitWeget import Ui_MainWindow
 from CentralLimitTheorem import *
 from Plot import Figure_Canvas
-import pyqtgraph as pg
+
+
+# import pyqtgraph as pg
 
 
 class MyMainForm(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
         super(MyMainForm, self).__init__(parent)
         self.setupUi(self)
-        # 添加登录按钮信号和槽。注意display函数不加小括号()
+
         self.pushButton_2.clicked.connect(self.simulate)
-        # pg.setConfigOptions(leftButtonPan=False)
-        # self.setCentralWidget(self.widget)
 
     def simulate(self):
         if self.comboBox.currentText() == 'Binomial':
