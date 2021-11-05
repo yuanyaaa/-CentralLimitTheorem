@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'CentralLimitWeget.ui'
+# Form implementation generated from reading ui file 'CentralLimitTheorem.ui'
 #
 # Created by: PyQt5 UI code generator 5.9.2
 #
@@ -30,9 +30,9 @@ class Ui_MainWindow(object):
         self.horizontalSlider_2.setGeometry(QtCore.QRect(250, 470, 160, 16))
         self.horizontalSlider_2.setOrientation(QtCore.Qt.Horizontal)
         self.horizontalSlider_2.setObjectName("horizontalSlider_2")
-        self.widget = QtWidgets.QWidget(self.centralwidget)
-        self.widget.setGeometry(QtCore.QRect(70, 10, 621, 391))
-        self.widget.setObjectName("widget")
+        self.graphicsView = QtWidgets.QGraphicsView(self.centralwidget)
+        self.graphicsView.setGeometry(QtCore.QRect(70, 10, 611, 391))
+        self.graphicsView.setObjectName("graphicsView")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 22))
