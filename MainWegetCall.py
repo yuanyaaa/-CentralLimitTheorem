@@ -14,6 +14,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout
 from CentralLimitWeget import Ui_MainWindow
 from CentralLimitTheorem import *
 from Plot import Figure_Canvas
+from PyQt5.QtGui import QIntValidator, QDoubleValidator
 
 
 # import pyqtgraph as pg
@@ -23,13 +24,22 @@ class MyMainForm(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
         super(MyMainForm, self).__init__(parent)
         self.setupUi(self)
+        # TODO Range from 2 to 100, but still has bug
+        self.rangemin.setValidator(QIntValidator(2, 100, self))
+        self.rangemax.setValidator(QIntValidator(2, 100, self))
+        self.rangemax.textChanged.connect(self.setSliderMax)
+        self.rangemin.textChanged.connect(self.setSliderMin)
+        # TODO Still has bug
+        self.pro.setValidator(
+            QDoubleValidator(0.0,  1.0, 3, notation=QDoubleValidator.StandardNotation))
+        # self.continue_.clicked.connect(self.simulateSecrete)
+        self.horizontalSlider.sliderMoved.connect(self.simulateSecrete)
+        self.horizontalSlider.sliderMoved.connect(self.setnValue)
 
-        self.pushButton_2.clicked.connect(self.simulate)
-
-    def simulate(self):
-        if self.comboBox.currentText() == 'Binomial':
-            print(self.horizontalSlider.value())
-            reality, ideal = binomial(self.horizontalSlider.value(), self.horizontalSlider_2.value() / 100, 10000)
+    def simulateSecrete(self):
+        if self.chooseDistribution.currentText() == 'Binomial':
+            print(self.horizontalSlider.value(), float(self.pro.text()))
+            reality, ideal = binomial(self.horizontalSlider.value(), float(self.pro.text()))
             dr = Figure_Canvas()
             # 实例化一个FigureCanvas
             dr.plot_self(reality, ideal)  # 画图
@@ -47,7 +57,16 @@ class MyMainForm(QMainWindow, Ui_MainWindow):
             # layout.addWidget(self.canvas)
             # self.setCentralWidget(cavans)
 
-    # def plot(self):
+    def setnValue(self):
+        self.n_value.setText(str(self.horizontalSlider.value()))
+
+    def setSliderMin(self):
+        self.sliderMin.setText(self.rangemin.text())
+        self.horizontalSlider.setMinimum(int(self.rangemin.text()))
+
+    def setSliderMax(self):
+        self.sliderMax.setText(self.rangemax.text())
+        self.horizontalSlider.setMaximum(int(self.rangemax.text()))
 
 
 if __name__ == "__main__":

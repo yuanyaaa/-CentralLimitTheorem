@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import math
 import matplotlib
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -13,14 +14,17 @@ def norm_pdf(x, mu, sigma):
     return pdf
 
 
-def binomial(n, p, size):
+def binomial(n, p):
     """绘制二项分布的概率质量函数"""
-    sample = np.random.binomial(n, p, size=size)  # 产生10000个符合二项分布的随机数
-    bins = np.arange(n + 2)
-    plt.hist(sample, bins=bins, align='left', density=True, rwidth=0.1)  # 绘制直方图
+    # sample = np.random.binomial(n, p, size=size)
+    # bins = np.arange(n + 2)
+    # plt.hist(sample, bins=bins, align='left', density=True, rwidth=0.1)  # 绘制直方图
+    x_reality = np.arange(0, n+1)
+    sample = [math.comb(n, i) * pow(p, i) * pow(1-p, n-i) for i in x_reality]
     x = np.arange(0, n+2, 0.1)
     y = norm_pdf(x, n*p, np.sqrt(n*p*(1-p)))
-    return (bins, sample), (x, y)
+    # print(x_reality, sample)
+    return (x_reality, sample), (x, y)
     # fig = plt.figure()
     # plt.plot(x, y, color='orange', lw=3)
     # # 设置标题和坐标

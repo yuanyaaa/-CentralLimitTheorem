@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>963</width>
-    <height>761</height>
+    <width>967</width>
+    <height>781</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="continue_2">
+   <widget class="QPushButton" name="continue_">
     <property name="geometry">
      <rect>
       <x>780</x>
@@ -70,26 +70,6 @@
      </rect>
     </property>
    </widget>
-   <widget class="QTextEdit" name="rangemin">
-    <property name="geometry">
-     <rect>
-      <x>370</x>
-      <y>570</y>
-      <width>51</width>
-      <height>41</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QTextEdit" name="rangemax">
-    <property name="geometry">
-     <rect>
-      <x>450</x>
-      <y>570</y>
-      <width>51</width>
-      <height>41</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QRadioButton" name="normalization">
     <property name="geometry">
      <rect>
@@ -106,7 +86,7 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>260</x>
+      <x>280</x>
       <y>570</y>
       <width>111</width>
       <height>41</height>
@@ -119,7 +99,7 @@
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>430</x>
+      <x>480</x>
       <y>580</y>
       <width>67</width>
       <height>17</height>
@@ -132,7 +112,7 @@
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>260</x>
+      <x>280</x>
       <y>650</y>
       <width>67</width>
       <height>17</height>
@@ -142,20 +122,10 @@
      <string>Step:</string>
     </property>
    </widget>
-   <widget class="QTextEdit" name="step">
-    <property name="geometry">
-     <rect>
-      <x>320</x>
-      <y>640</y>
-      <width>51</width>
-      <height>41</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>480</x>
+      <x>470</x>
       <y>650</y>
       <width>67</width>
       <height>17</height>
@@ -163,16 +133,6 @@
     </property>
     <property name="text">
      <string>P:</string>
-    </property>
-   </widget>
-   <widget class="QTextEdit" name="pro">
-    <property name="geometry">
-     <rect>
-      <x>520</x>
-      <y>640</y>
-      <width>51</width>
-      <height>41</height>
-     </rect>
     </property>
    </widget>
    <widget class="QLabel" name="label_5">
@@ -201,30 +161,7 @@
      <string>逐帧播放</string>
     </property>
    </widget>
-   <widget class="QTextEdit" name="n_value">
-    <property name="geometry">
-     <rect>
-      <x>900</x>
-      <y>640</y>
-      <width>51</width>
-      <height>41</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="continue_3">
-    <property name="geometry">
-     <rect>
-      <x>520</x>
-      <y>570</y>
-      <width>51</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Set</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_7">
+   <widget class="QLabel" name="sliderMin">
     <property name="geometry">
      <rect>
       <x>730</x>
@@ -237,7 +174,7 @@
      <string>0</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_8">
+   <widget class="QLabel" name="sliderMax">
     <property name="geometry">
      <rect>
       <x>870</x>
@@ -250,13 +187,63 @@
      <string>0</string>
     </property>
    </widget>
+   <widget class="QLineEdit" name="rangemin">
+    <property name="geometry">
+     <rect>
+      <x>410</x>
+      <y>570</y>
+      <width>51</width>
+      <height>41</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="rangemax">
+    <property name="geometry">
+     <rect>
+      <x>510</x>
+      <y>570</y>
+      <width>51</width>
+      <height>41</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="step">
+    <property name="geometry">
+     <rect>
+      <x>340</x>
+      <y>640</y>
+      <width>51</width>
+      <height>41</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="pro">
+    <property name="geometry">
+     <rect>
+      <x>510</x>
+      <y>640</y>
+      <width>51</width>
+      <height>41</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="n_value">
+    <property name="geometry">
+     <rect>
+      <x>910</x>
+      <y>640</y>
+      <width>51</width>
+      <height>41</height>
+     </rect>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>963</width>
+     <width>967</width>
      <height>28</height>
     </rect>
    </property>
