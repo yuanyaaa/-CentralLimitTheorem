@@ -52,7 +52,7 @@ def poisson(lambda_, isChecked):
         # print("new sample", sample)
 
     if isChecked:
-        x = np.arange((0 - lambda_) / np.sqrt(lambda_), (21 - lambda_) / np.sqrt(lambda_), 0.1)
+        x = np.arange((0 - lambda_) / np.sqrt(lambda_), (20 - lambda_) / np.sqrt(lambda_), 0.1)
         y = norm_pdf(x, 0, 1)
     else:
         x = np.arange(0, 21, 0.1)

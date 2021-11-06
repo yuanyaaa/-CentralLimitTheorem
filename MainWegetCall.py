@@ -30,7 +30,7 @@ class MyMainForm(QMainWindow, Ui_MainWindow):
         self.rangemin.setValidator(QIntValidator(2, 100, self))
         self.rangemax.setValidator(QIntValidator(2, 100, self))
         self.step.setValidator(QIntValidator(2, 100, self))
-        self.chooseDistribution.activated(str).connect(self.chooseDis)
+        self.chooseDistribution.activated[str].connect(self.chooseDis)
 
         self.rangemax.textChanged.connect(self.setSliderMax)
         self.rangemin.textChanged.connect(self.setSliderMin)
@@ -102,7 +102,7 @@ class MyMainForm(QMainWindow, Ui_MainWindow):
         if text == 'Binomial':
             self.label.setText("The range of n")
         elif text == 'Poisson':
-            self.label.setText("The range of " + r"$\lambda$")
+            self.label.setText(u"The range of \u03bb")
 
 
 if __name__ == "__main__":

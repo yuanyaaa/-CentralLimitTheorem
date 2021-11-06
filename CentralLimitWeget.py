@@ -92,7 +92,7 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.continue_.setText(_translate("MainWindow", "Start"))
         self.chooseDistribution.setItemText(0, _translate("MainWindow", "Binomial"))
-        self.chooseDistribution.setItemText(1, _translate("MainWindow", "Test"))
+        self.chooseDistribution.setItemText(1, _translate("MainWindow", "Poisson"))
         self.normalization.setText(_translate("MainWindow", "标准化"))
         self.label.setText(_translate("MainWindow", "The range of n:"))
         self.label_2.setText(_translate("MainWindow", "-"))
