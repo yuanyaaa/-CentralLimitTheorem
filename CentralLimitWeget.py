@@ -58,6 +58,7 @@ class Ui_MainWindow(object):
         self.sliderMax.setObjectName("sliderMax")
         self.rangemin = QtWidgets.QLineEdit(self.centralwidget)
         self.rangemin.setGeometry(QtCore.QRect(410, 570, 51, 41))
+        self.rangemin.setEchoMode(QtWidgets.QLineEdit.Normal)
         self.rangemin.setObjectName("rangemin")
         self.rangemax = QtWidgets.QLineEdit(self.centralwidget)
         self.rangemax.setGeometry(QtCore.QRect(510, 570, 51, 41))

@@ -8,7 +8,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 # 通过继承FigureCanvas类，使得该类既是一个PyQt5的Qwidget，又是一个matplotlib的FigureCanvas，这是连接pyqt5与matplot lib的关键
 class Figure_Canvas(FigureCanvas):
 
-    def __init__(self, parent=None, width=8.5, height=5.25, dpi=100):
+    def __init__(self, parent=None, width=8.5, height=5.18, dpi=100):
         fig = Figure(figsize=(width, height),
                      dpi=dpi)  # 创建一个Figure，注意：该Figure为matplotlib下的figure，不是matplotlib.pyplot下面的figure
 

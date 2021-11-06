@@ -7,14 +7,16 @@
 # WARNING! All changes made in this file will be lost!
 # 导入程序运行必须模块
 import sys
+import time
 # PyQt5中使用的基本控件都在PyQt5.QtWidgets模块中
 from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout
+from PyQt5.QtWidgets import QApplication, QMainWindow, QMessageBox
 # 导入designer工具生成的login模块
 from CentralLimitWeget import Ui_MainWindow
 from CentralLimitTheorem import *
 from Plot import Figure_Canvas
 from PyQt5.QtGui import QIntValidator, QDoubleValidator
+from PyQt5.QtCore import QThread, pyqtSignal
 
 
 # import pyqtgraph as pg
@@ -27,35 +29,63 @@ class MyMainForm(QMainWindow, Ui_MainWindow):
         # TODO Range from 2 to 100, but still has bug
         self.rangemin.setValidator(QIntValidator(2, 100, self))
         self.rangemax.setValidator(QIntValidator(2, 100, self))
+        self.step.setValidator(QIntValidator(2, 100, self))
+        self.chooseDistribution.activated(str).connect(self.chooseDis)
+
         self.rangemax.textChanged.connect(self.setSliderMax)
         self.rangemin.textChanged.connect(self.setSliderMin)
         # TODO Still has bug
         self.pro.setValidator(
-            QDoubleValidator(0.0,  1.0, 3, notation=QDoubleValidator.StandardNotation))
-        # self.continue_.clicked.connect(self.simulateSecrete)
+            QDoubleValidator(0.0, 1.0, 3, notation=QDoubleValidator.StandardNotation))
         self.horizontalSlider.sliderMoved.connect(self.simulateSecrete)
         self.horizontalSlider.sliderMoved.connect(self.setnValue)
+        self.continue_.clicked.connect(self.simulateContinue)
+        # self.work = WorkThread()
 
     def simulateSecrete(self):
+        print(self.horizontalSlider.value(), float(self.pro.text()))
         if self.chooseDistribution.currentText() == 'Binomial':
-            print(self.horizontalSlider.value(), float(self.pro.text()))
-            reality, ideal = binomial(self.horizontalSlider.value(), float(self.pro.text()))
-            dr = Figure_Canvas()
-            # 实例化一个FigureCanvas
-            dr.plot_self(reality, ideal)  # 画图
-            graphicscene = QtWidgets.QGraphicsScene()  # 第三步，创建一个QGraphicsScene，因为加载的图形（FigureCanvas）不能直接放到graphicview控件中，必须先放到graphicScene，然后再把graphicscene放到graphicview中
-            graphicscene.addWidget(dr)  # 第四步，把图形放到QGraphicsScene中，注意：图形是作为一个QWidget放到QGraphicsScene中的
-            self.graphicsView.setScene(graphicscene)  # 第五步，把QGraphicsScene放入QGraphicsView
-            self.graphicsView.show()  # 最后，调用show方法呈现图形！Voila!!
-            # self.setCentralWidget(self.graphicsView)
-            # self.graphicsView.setFixedSize(800, 600)
-            # self.pw = pg.PlotWidget(self.graphicsView)
-            # self.plot_data = self.pw.plot(ideal[0], ideal[1], pen=None)
-            # self.pw.show()
-            # cavans = binomial(self.horizontalSlider.value(), self.horizontalSlider_2.value()/100, 10000)
-            # layout = QMainWindow.QVBoxLayout()
-            # layout.addWidget(self.canvas)
-            # self.setCentralWidget(cavans)
+            reality, ideal = binomial(self.horizontalSlider.value(), float(self.pro.text()),
+                                      self.normalization.isChecked())
+        elif self.chooseDistribution.currentText() == 'Poisson':
+            reality, ideal = poisson(self.horizontalSlider.value(), self.normalization.isChecked())
+        dr = Figure_Canvas()
+        # 实例化一个FigureCanvas
+        dr.plot_self(reality, ideal)  # 画图
+        graphicscene = QtWidgets.QGraphicsScene()  # 第三步，创建一个QGraphicsScene，因为加载的图形（FigureCanvas）不能直接放到graphicview控件中，必须先放到graphicScene，然后再把graphicscene放到graphicview中
+        graphicscene.addWidget(dr)  # 第四步，把图形放到QGraphicsScene中，注意：图形是作为一个QWidget放到QGraphicsScene中的
+        self.graphicsView.setScene(graphicscene)  # 第五步，把QGraphicsScene放入QGraphicsView
+        self.graphicsView.show()  # 最后，调用show方法呈现图形！Voila!!
+
+    def simulateContinue(self):
+        if self.rangemin.text() == '' or self.rangemax.text() == '' or self.step.text() == '' or self.pro.text() == '':
+            # print("Error!!!")
+            msgBox = QMessageBox()
+            msgBox.setWindowTitle('错误')
+            msgBox.setIcon(QMessageBox.Critical)
+            msgBox.setText("请输入完整数据")
+            msgBox.exec()
+        else:
+            valueMin = int(self.rangemin.text())
+            valueMax = int(self.rangemax.text())
+            step = int(self.step.text())
+            # print(type(valueMin), type(valueMax), type(step))
+            for n in range(valueMin, valueMax + 1, step):
+                print("the value of current value n:", n)
+
+                if self.chooseDistribution.currentText() == 'Binomial':
+                    reality, ideal = binomial(n, float(self.pro.text()), self.normalization.isChecked())
+                elif self.chooseDistribution.currentText() == 'Poisson':
+                    reality, ideal = poisson(n, self.normalization.isChecked())
+                dr = Figure_Canvas()
+                # 实例化一个FigureCanvas
+                dr.plot_self(reality, ideal)  # 画图
+                graphicscene = QtWidgets.QGraphicsScene()  # 第三步，创建一个QGraphicsScene，因为加载的图形（FigureCanvas）不能直接放到graphicview控件中，必须先放到graphicScene，然后再把graphicscene放到graphicview中
+                graphicscene.addWidget(dr)  # 第四步，把图形放到QGraphicsScene中，注意：图形是作为一个QWidget放到QGraphicsScene中的
+                self.graphicsView.setScene(graphicscene)  # 第五步，把QGraphicsScene放入QGraphicsView
+                self.graphicsView.show()  # 最后，调用show方法呈现图形！Voila!!
+                QtWidgets.QApplication.processEvents()
+                time.sleep(.5)
 
     def setnValue(self):
         self.n_value.setText(str(self.horizontalSlider.value()))
@@ -67,6 +97,12 @@ class MyMainForm(QMainWindow, Ui_MainWindow):
     def setSliderMax(self):
         self.sliderMax.setText(self.rangemax.text())
         self.horizontalSlider.setMaximum(int(self.rangemax.text()))
+
+    def chooseDis(self, text):
+        if text == 'Binomial':
+            self.label.setText("The range of n")
+        elif text == 'Poisson':
+            self.label.setText("The range of " + r"$\lambda$")
 
 
 if __name__ == "__main__":
