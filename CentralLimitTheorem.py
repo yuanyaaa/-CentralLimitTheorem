@@ -1,12 +1,8 @@
-import pandas as pd
 import numpy as np
 import math
 import matplotlib
-import matplotlib.pyplot as plt
-import seaborn as sns
 
 matplotlib.use('Qt5Agg')
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 
 def norm_pdf(x, mu, sigma):

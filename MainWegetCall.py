@@ -16,10 +16,8 @@ from CentralLimitWeget import Ui_MainWindow
 from CentralLimitTheorem import *
 from Plot import Figure_Canvas
 from PyQt5.QtGui import QIntValidator, QDoubleValidator
-from PyQt5.QtCore import QThread, pyqtSignal
 
 
-# import pyqtgraph as pg
 
 
 class MyMainForm(QMainWindow, Ui_MainWindow):
