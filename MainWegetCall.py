@@ -55,6 +55,10 @@ class MyMainForm(QMainWindow, Ui_MainWindow):
                 reality, ideal = poisson(self.horizontalSlider.value(), self.normalization.isChecked())
             elif self.chooseDistribution.currentText() == 'Chi2':
                 reality, ideal = chi2(self.horizontalSlider.value(), self.normalization.isChecked())
+            elif self.chooseDistribution.currentText() == 'T':
+                reality, ideal = t(self.horizontalSlider.value(), self.normalization.isChecked())
+            elif self.chooseDistribution.currentText() == 'F':
+                reality, ideal = f(self.horizontalSlider.value(), self.normalization.isChecked())
             dr = Figure_Canvas()
             # 实例化一个FigureCanvas
             dr.plot_self(reality, ideal, self.chooseDistribution.currentText())  # 画图
@@ -86,6 +90,10 @@ class MyMainForm(QMainWindow, Ui_MainWindow):
                     reality, ideal = poisson(n, self.normalization.isChecked())
                 elif self.chooseDistribution.currentText() == 'Chi2':
                     reality, ideal = chi2(n, self.normalization.isChecked())
+                elif self.chooseDistribution.currentText() == 'T':
+                    reality, ideal = t(n, self.normalization.isChecked())
+                elif self.chooseDistribution.currentText() == 'F':
+                    reality, ideal = f(n, self.normalization.isChecked())
                 dr = Figure_Canvas()
                 # 实例化一个FigureCanvas
                 dr.plot_self(reality, ideal, self.chooseDistribution.currentText())  # 画图
@@ -121,6 +129,10 @@ class MyMainForm(QMainWindow, Ui_MainWindow):
             self.pro.hide()
 
         elif text == 'Chi2':
+            self.label.setText("The range of k:")
+            self.label_4.hide()
+            self.pro.hide()
+        elif text == 'T':
             self.label.setText("The range of k:")
             self.label_4.hide()
             self.pro.hide()
