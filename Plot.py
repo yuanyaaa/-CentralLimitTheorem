@@ -17,10 +17,25 @@ class Figure_Canvas(FigureCanvas):
 
         self.axes = fig.add_subplot(111)  # 调用figure下面的add_subplot方法，类似于matplotlib.pyplot下面的subplot方法
 
-    def plot_self(self, reality, ideal):
+    def plot_self(self, reality, ideal, distribution: str):
         self.axes.bar(x=reality[0], height=reality[1])  # 绘制直方图
         self.axes.plot(ideal[0], ideal[1], color='orange', lw=3)
+        self.setPlotInfo(distribution)
         # 设置标题和坐标
         # self.axes.title('Binomial PMF with n={}, p={}'.format(n, p))
         # self.axes.xlabel('number of successes')
         # self.axes.ylabel('probability')
+
+    def setPlotInfo(self, distribution: str):
+        if distribution == 'Binomial':
+            self.axes.set_title("Binomial Distribution")
+            self.axes.set_xlabel("number of success")
+            self.axes.set_ylabel("probability")
+        elif distribution == 'Poisson':
+            self.axes.set_title("Poisson Distribution")
+            self.axes.set_xlabel("\u03bb")
+            self.axes.set_ylabel("probability")
+        elif distribution == 'Chi2':
+            self.axes.set_title("Chi2 Distribution")
+            self.axes.set_xlabel("k")
+            self.axes.set_ylabel("probability")

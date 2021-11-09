@@ -46,6 +46,16 @@
       <string>Poisson</string>
      </property>
     </item>
+    <item>
+     <property name="text">
+      <string>Chi2</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>T</string>
+     </property>
+    </item>
    </widget>
    <widget class="QSlider" name="horizontalSlider">
     <property name="geometry">
@@ -86,9 +96,9 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>280</x>
+      <x>250</x>
       <y>570</y>
-      <width>111</width>
+      <width>191</width>
       <height>41</height>
      </rect>
     </property>
@@ -112,7 +122,7 @@
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>280</x>
+      <x>250</x>
       <y>650</y>
       <width>67</width>
       <height>17</height>
@@ -190,7 +200,7 @@
    <widget class="QLineEdit" name="rangemin">
     <property name="geometry">
      <rect>
-      <x>410</x>
+      <x>400</x>
       <y>570</y>
       <width>51</width>
       <height>41</height>
@@ -213,7 +223,7 @@
    <widget class="QLineEdit" name="step">
     <property name="geometry">
      <rect>
-      <x>340</x>
+      <x>320</x>
       <y>640</y>
       <width>51</width>
       <height>41</height>
@@ -247,7 +257,7 @@
      <x>0</x>
      <y>0</y>
      <width>967</width>
-     <height>28</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">

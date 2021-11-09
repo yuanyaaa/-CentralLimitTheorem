@@ -18,15 +18,13 @@ from Plot import Figure_Canvas
 from PyQt5.QtGui import QIntValidator, QDoubleValidator
 
 
-
-
 class MyMainForm(QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
         super(MyMainForm, self).__init__(parent)
         self.setupUi(self)
         # TODO Range from 2 to 100, but still has bug
         self.rangemin.setValidator(QIntValidator(2, 100, self))
-        self.rangemax.setValidator(QIntValidator(2, 100, self))
+        self.rangemax.setValidator(QIntValidator(2, 200, self))
         self.step.setValidator(QIntValidator(2, 100, self))
         self.chooseDistribution.activated[str].connect(self.chooseDis)
 
@@ -41,22 +39,33 @@ class MyMainForm(QMainWindow, Ui_MainWindow):
         # self.work = WorkThread()
 
     def simulateSecrete(self):
-        print(self.horizontalSlider.value(), float(self.pro.text()))
-        if self.chooseDistribution.currentText() == 'Binomial':
-            reality, ideal = binomial(self.horizontalSlider.value(), float(self.pro.text()),
-                                      self.normalization.isChecked())
-        elif self.chooseDistribution.currentText() == 'Poisson':
-            reality, ideal = poisson(self.horizontalSlider.value(), self.normalization.isChecked())
-        dr = Figure_Canvas()
-        # 实例化一个FigureCanvas
-        dr.plot_self(reality, ideal)  # 画图
-        graphicscene = QtWidgets.QGraphicsScene()  # 第三步，创建一个QGraphicsScene，因为加载的图形（FigureCanvas）不能直接放到graphicview控件中，必须先放到graphicScene，然后再把graphicscene放到graphicview中
-        graphicscene.addWidget(dr)  # 第四步，把图形放到QGraphicsScene中，注意：图形是作为一个QWidget放到QGraphicsScene中的
-        self.graphicsView.setScene(graphicscene)  # 第五步，把QGraphicsScene放入QGraphicsView
-        self.graphicsView.show()  # 最后，调用show方法呈现图形！Voila!!
+        if self.rangemin.text() == '' or self.rangemax.text() == '' or self.step.text() == '' or (
+                self.pro.text() == '' and self.chooseDistribution.currentText() == "Binomial"):
+            # print("Error!!!")
+            msgBox = QMessageBox()
+            msgBox.setWindowTitle('错误')
+            msgBox.setIcon(QMessageBox.Critical)
+            msgBox.setText("请输入完整数据")
+            msgBox.exec()
+        else:
+            if self.chooseDistribution.currentText() == 'Binomial':
+                reality, ideal = binomial(self.horizontalSlider.value(), float(self.pro.text()),
+                                          self.normalization.isChecked())
+            elif self.chooseDistribution.currentText() == 'Poisson':
+                reality, ideal = poisson(self.horizontalSlider.value(), self.normalization.isChecked())
+            elif self.chooseDistribution.currentText() == 'Chi2':
+                reality, ideal = chi2(self.horizontalSlider.value(), self.normalization.isChecked())
+            dr = Figure_Canvas()
+            # 实例化一个FigureCanvas
+            dr.plot_self(reality, ideal, self.chooseDistribution.currentText())  # 画图
+            graphicscene = QtWidgets.QGraphicsScene()  # 第三步，创建一个QGraphicsScene，因为加载的图形（FigureCanvas）不能直接放到graphicview控件中，必须先放到graphicScene，然后再把graphicscene放到graphicview中
+            graphicscene.addWidget(dr)  # 第四步，把图形放到QGraphicsScene中，注意：图形是作为一个QWidget放到QGraphicsScene中的
+            self.graphicsView.setScene(graphicscene)  # 第五步，把QGraphicsScene放入QGraphicsView
+            self.graphicsView.show()  # 最后，调用show方法呈现图形！Voila!!
 
     def simulateContinue(self):
-        if self.rangemin.text() == '' or self.rangemax.text() == '' or self.step.text() == '' or self.pro.text() == '':
+        if self.rangemin.text() == '' or self.rangemax.text() == '' or self.step.text() == '' or (
+                self.pro.text() == '' and self.chooseDistribution.currentText() == 'Binomial'):
             # print("Error!!!")
             msgBox = QMessageBox()
             msgBox.setWindowTitle('错误')
@@ -75,32 +84,46 @@ class MyMainForm(QMainWindow, Ui_MainWindow):
                     reality, ideal = binomial(n, float(self.pro.text()), self.normalization.isChecked())
                 elif self.chooseDistribution.currentText() == 'Poisson':
                     reality, ideal = poisson(n, self.normalization.isChecked())
+                elif self.chooseDistribution.currentText() == 'Chi2':
+                    reality, ideal = chi2(n, self.normalization.isChecked())
                 dr = Figure_Canvas()
                 # 实例化一个FigureCanvas
-                dr.plot_self(reality, ideal)  # 画图
+                dr.plot_self(reality, ideal, self.chooseDistribution.currentText())  # 画图
                 graphicscene = QtWidgets.QGraphicsScene()  # 第三步，创建一个QGraphicsScene，因为加载的图形（FigureCanvas）不能直接放到graphicview控件中，必须先放到graphicScene，然后再把graphicscene放到graphicview中
                 graphicscene.addWidget(dr)  # 第四步，把图形放到QGraphicsScene中，注意：图形是作为一个QWidget放到QGraphicsScene中的
                 self.graphicsView.setScene(graphicscene)  # 第五步，把QGraphicsScene放入QGraphicsView
                 self.graphicsView.show()  # 最后，调用show方法呈现图形！Voila!!
                 QtWidgets.QApplication.processEvents()
-                time.sleep(.5)
+                time.sleep(.7)
 
     def setnValue(self):
         self.n_value.setText(str(self.horizontalSlider.value()))
 
     def setSliderMin(self):
-        self.sliderMin.setText(self.rangemin.text())
-        self.horizontalSlider.setMinimum(int(self.rangemin.text()))
+        if self.rangemin.text() != '':
+            self.sliderMin.setText(self.rangemin.text())
+            self.horizontalSlider.setMinimum(int(self.rangemin.text()))
 
     def setSliderMax(self):
-        self.sliderMax.setText(self.rangemax.text())
-        self.horizontalSlider.setMaximum(int(self.rangemax.text()))
+        if self.rangemax.text() != '':
+            self.sliderMax.setText(self.rangemax.text())
+            self.horizontalSlider.setMaximum(int(self.rangemax.text()))
 
     def chooseDis(self, text):
         if text == 'Binomial':
-            self.label.setText("The range of n")
+            self.label.setText("The range of n:")
+            self.label_4.show()
+            self.pro.show()
+
         elif text == 'Poisson':
-            self.label.setText(u"The range of \u03bb")
+            self.label.setText(u"The range of \u03bb:")
+            self.label_4.hide()
+            self.pro.hide()
+
+        elif text == 'Chi2':
+            self.label.setText("The range of k:")
+            self.label_4.hide()
+            self.pro.hide()
 
 
 if __name__ == "__main__":
