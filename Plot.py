@@ -19,10 +19,11 @@ class Figure_Canvas(FigureCanvas):
 
     def plot_self(self, reality, ideal, distribution: str):
         if distribution == "Chi2" or distribution == "T" or distribution == 'F':
-            self.axes.plot(reality[0], reality[1], color='blue', lw=3)
+            self.axes.plot(reality[0], reality[1], color='blue', lw=4, label="Reality Data")
         else:
             self.axes.bar(x=reality[0], height=reality[1])  # 绘制直方图
-        self.axes.plot(ideal[0], ideal[1], color='orange', lw=3)
+        self.axes.plot(ideal[0], ideal[1], color='orange', lw=3, label="Ideal Data")
+        self.axes.legend()
         self.setPlotInfo(distribution)
         # 设置标题和坐标
         # self.axes.title('Binomial PMF with n={}, p={}'.format(n, p))
@@ -40,13 +41,13 @@ class Figure_Canvas(FigureCanvas):
             self.axes.set_ylabel("probability")
         elif distribution == 'Chi2':
             self.axes.set_title("Chi2 Distribution")
-            self.axes.set_xlabel("k")
+            self.axes.set_xlabel("n")
             self.axes.set_ylabel("probability")
         elif distribution == 'T':
             self.axes.set_title("T Distribution")
-            self.axes.set_xlabel("k")
+            self.axes.set_xlabel("n")
             self.axes.set_ylabel("probability")
         elif distribution == 'F':
             self.axes.set_title("F Distribution")
-            self.axes.set_xlabel("n2")
+            self.axes.set_xlabel("n1")
             self.axes.set_ylabel("probability")

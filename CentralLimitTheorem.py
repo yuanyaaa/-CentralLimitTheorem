@@ -18,22 +18,30 @@ def binomial(n, p, isChecked):
     # sample = np.random.binomial(n, p, size=size)
     # bins = np.arange(n + 2)
     # plt.hist(sample, bins=bins, align='left', density=True, rwidth=0.1)  # 绘制直方图
-    x_reality = np.arange(0, n + 1)
-    sample = [math.comb(n, i) * pow(p, i) * pow(1 - p, n - i) for i in x_reality]
+    e = n * p
+    var = n * p * (1 - p)
+    x_reality = np.arange(e - 9 * np.sqrt(var), e + 9 * np.sqrt(var))
+    sample = []
+    for x in x_reality:
+        if x < 0:
+            sample.append(0)
+        else:
+            sample.append(math.comb(n, int(x)) * pow(p, int(x)) * pow(1 - p, n - int(x)))
+    # sample = [math.comb(n, i) * pow(p, i) * pow(1 - p, n - i) for i in x_reality]
     if isChecked:
-        x_reality = [(x - n * p) / np.sqrt(n * p * (1 - p)) for x in x_reality]
-        print("old sample:", sample)
-        sample = [y * np.sqrt(n * p * (1 - p)) for y in sample]
-        print("new sample", sample)
+        x_reality = [(x - e) / np.sqrt(var) for x in x_reality]
+        # print("old sample:", sample)
+        sample = [y * np.sqrt(var) for y in sample]
+        # print("new sample", sample)
     # else:
     #     sample = [math.comb(n, i) * pow(p, i) * pow(1 - p, n - i) for i in x_reality]
 
     if isChecked:
-        x = np.arange((0 - n * p) / np.sqrt(n * p * (1 - p)), (n + 2 - n * p) / np.sqrt(n * p * (1 - p)), 0.1)
+        x = np.arange((e - 15 * np.sqrt(var) - e) / np.sqrt(var), (e + 15 * np.sqrt(var) - e) / np.sqrt(var), 0.1)
         y = norm_pdf(x, 0, 1)
     else:
-        x = np.arange(0, n + 2, 0.1)
-        y = norm_pdf(x, n * p, np.sqrt(n * p * (1 - p)))
+        x = np.arange(e - 15 * np.sqrt(var), e + 15 * np.sqrt(var), 0.1)
+        y = norm_pdf(x, e, np.sqrt(var))
 
     # print(x_reality, sample)
     return (x_reality, sample), (x, y)
@@ -92,50 +100,49 @@ def chi2(k, isChecked: bool):
 
 def t(k, isChecked: bool):
     """绘制t分布的概率质量函数"""
-    x_min = 0 - 9 * np.sqrt(k/(k-2))
-    x_max = 0 + 9 * np.sqrt(k/(k-2))
+    x_min = 0 - 9 * np.sqrt(k / (k - 2))
+    x_max = 0 + 9 * np.sqrt(k / (k - 2))
     # 统计数据
     x_reality = np.arange(x_min, x_max, 0.1)
     sample = stats.t.pdf(x_reality, df=k)
     # 理想数据
     x = np.arange(x_min, x_max, 0.1)
-    y = norm_pdf(x, 0, np.sqrt(k/(k-2)))
+    y = norm_pdf(x, 0, np.sqrt(k / (k - 2)))
     if isChecked:
         # 对统计数据标准化
-        x_reality = [x_ / np.sqrt(k/(k-2)) for x_ in x_reality]
-        sample_ = [y_ * np.sqrt(k/(k-2)) for y_ in sample]
+        x_reality = [x_ / np.sqrt(k / (k - 2)) for x_ in x_reality]
+        sample_ = [y_ * np.sqrt(k / (k - 2)) for y_ in sample]
         # print("sample:", sample)
         sample = sample_
         # print(sample)
         # 对理想数据标准化
-        x = np.arange(x_min / np.sqrt(k/(k-2)), x_max / np.sqrt(k/(k-2)), 0.1)
+        x = np.arange(x_min / np.sqrt(k / (k - 2)), x_max / np.sqrt(k / (k - 2)), 0.1)
         # print("chi2 x:", x)
         y = norm_pdf(x, 0, 1)
 
     return (x_reality, sample), (x, y)
 
-def f(n2, isChecked: bool):
+
+def f(n1, n2, isChecked: bool):
     """绘制f分布的概率质量函数"""
-    n1 = 5
+    # n2 = 1000
     e = n2 / (n2 - 2)
-    var = 2 * n2 * n2 * (n1 + n2 -2) / (n1 * (n2-2)*(n2-4))
-    x_min = 0 - 9 * np.sqrt(var)
-    x_max = 0 + 9 * np.sqrt(var)
+    var = (2 * n2 * n2 * (n1 + n2 - 2)) / (n1 * (n2 - 2) * (n2 - 2) * (n2 - 4))
+    x_min = e - 9 * np.sqrt(var)
+    x_max = e + 9 * np.sqrt(var)
     # 统计数据
-    x_reality = np.arange(x_min, x_max, 0.1)
+    x_reality = np.arange(x_min, x_max, 0.01)
     sample = stats.f.pdf(x_reality, n1, n2)
     # 理想数据
-    x = np.arange(x_min, x_max, 0.1)
+    x = np.arange(x_min, x_max, 0.01)
     y = norm_pdf(x, e, np.sqrt(var))
     if isChecked:
         # 对统计数据标准化
-        x_reality = [(x_-e) / np.sqrt(var) for x_ in x_reality]
-        sample_ = [y_ * np.sqrt(var) for y_ in sample]
-        # print("sample:", sample)
-        sample = sample_
-        # print(sample)
+        x_reality = [(x_ - e) / np.sqrt(var) for x_ in x_reality]
+        sample = [y_ * np.sqrt(var) for y_ in sample]
+
         # 对理想数据标准化
-        x = np.arange((x_min-e) / np.sqrt(var), (x_max-e) / np.sqrt(var), 0.1)
+        x = np.arange((x_min - e) / np.sqrt(var), (x_max - e) / np.sqrt(var), 0.1)
         # print("chi2 x:", x)
         y = norm_pdf(x, 0, 1)
 

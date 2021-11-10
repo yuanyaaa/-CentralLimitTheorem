@@ -28,11 +28,11 @@ class MyMainForm(QMainWindow, Ui_MainWindow):
         self.step.setValidator(QIntValidator(2, 100, self))
         self.chooseDistribution.activated[str].connect(self.chooseDis)
 
-        self.rangemax.textChanged.connect(self.setSliderMax)
-        self.rangemin.textChanged.connect(self.setSliderMin)
+        self.rangemax.textChanged.connect(self.setSliderValue)
+        self.rangemin.textChanged.connect(self.setSliderValue)
         # TODO Still has bug
-        self.pro.setValidator(
-            QDoubleValidator(0.0, 1.0, 3, notation=QDoubleValidator.StandardNotation))
+        # self.pro.setValidator(
+        #     QDoubleValidator(0.0, 1.0, 3, notation=QDoubleValidator.StandardNotation))
         self.horizontalSlider.sliderMoved.connect(self.simulateSecrete)
         self.horizontalSlider.sliderMoved.connect(self.setnValue)
         self.continue_.clicked.connect(self.simulateContinue)
@@ -40,25 +40,35 @@ class MyMainForm(QMainWindow, Ui_MainWindow):
 
     def simulateSecrete(self):
         if self.rangemin.text() == '' or self.rangemax.text() == '' or self.step.text() == '' or (
-                self.pro.text() == '' and self.chooseDistribution.currentText() == "Binomial"):
+                self.pro.text() == '' and self.chooseDistribution.currentText() == "Binomial") or (
+                self.pro.text() == '' and self.chooseDistribution.currentText() == "F"):
             # print("Error!!!")
-            msgBox = QMessageBox()
-            msgBox.setWindowTitle('错误')
-            msgBox.setIcon(QMessageBox.Critical)
-            msgBox.setText("请输入完整数据")
-            msgBox.exec()
+            self.reportError("请输入完整数据")
         else:
             if self.chooseDistribution.currentText() == 'Binomial':
-                reality, ideal = binomial(self.horizontalSlider.value(), float(self.pro.text()),
-                                          self.normalization.isChecked())
+                if float(self.pro.text()) > 1 or float(self.pro.text()) <= 0:
+                    self.reportError("P的值超出范围")
+                    return
+                else:
+                    reality, ideal = binomial(self.horizontalSlider.value(), float(self.pro.text()),
+                                              self.normalization.isChecked())
             elif self.chooseDistribution.currentText() == 'Poisson':
                 reality, ideal = poisson(self.horizontalSlider.value(), self.normalization.isChecked())
             elif self.chooseDistribution.currentText() == 'Chi2':
                 reality, ideal = chi2(self.horizontalSlider.value(), self.normalization.isChecked())
             elif self.chooseDistribution.currentText() == 'T':
-                reality, ideal = t(self.horizontalSlider.value(), self.normalization.isChecked())
+                if self.horizontalSlider.value() <= 2:
+                    self.reportError("n的值必须大于2！")
+                    return
+                else:
+                    reality, ideal = t(self.horizontalSlider.value(), self.normalization.isChecked())
             elif self.chooseDistribution.currentText() == 'F':
-                reality, ideal = f(self.horizontalSlider.value(), self.normalization.isChecked())
+                if float(self.pro.text()) <= 4:
+                    self.reportError("n2必须大于4")
+                    return
+                else:
+                    # print('horizontalSlider', self.horizontalSlider.value())
+                    reality, ideal = f(self.horizontalSlider.value(), int(self.pro.text()), self.normalization.isChecked())
             dr = Figure_Canvas()
             # 实例化一个FigureCanvas
             dr.plot_self(reality, ideal, self.chooseDistribution.currentText())  # 画图
@@ -69,13 +79,10 @@ class MyMainForm(QMainWindow, Ui_MainWindow):
 
     def simulateContinue(self):
         if self.rangemin.text() == '' or self.rangemax.text() == '' or self.step.text() == '' or (
-                self.pro.text() == '' and self.chooseDistribution.currentText() == 'Binomial'):
+                self.pro.text() == '' and self.chooseDistribution.currentText() == 'Binomial') or (
+                self.pro.text() == '' and self.chooseDistribution.currentText() == 'F'):
             # print("Error!!!")
-            msgBox = QMessageBox()
-            msgBox.setWindowTitle('错误')
-            msgBox.setIcon(QMessageBox.Critical)
-            msgBox.setText("请输入完整数据")
-            msgBox.exec()
+            self.reportError("请输入完整数据")
         else:
             valueMin = int(self.rangemin.text())
             valueMax = int(self.rangemax.text())
@@ -85,15 +92,27 @@ class MyMainForm(QMainWindow, Ui_MainWindow):
                 print("the value of current value n:", n)
 
                 if self.chooseDistribution.currentText() == 'Binomial':
-                    reality, ideal = binomial(n, float(self.pro.text()), self.normalization.isChecked())
+                    if float(self.pro.text()) > 1 or float(self.pro.text()) <= 0:
+                        self.reportError("P的值超出范围")
+                        return
+                    else:
+                        reality, ideal = binomial(n, float(self.pro.text()), self.normalization.isChecked())
                 elif self.chooseDistribution.currentText() == 'Poisson':
                     reality, ideal = poisson(n, self.normalization.isChecked())
                 elif self.chooseDistribution.currentText() == 'Chi2':
                     reality, ideal = chi2(n, self.normalization.isChecked())
                 elif self.chooseDistribution.currentText() == 'T':
-                    reality, ideal = t(n, self.normalization.isChecked())
+                    if n <= 2:
+                        self.reportError("n的值必须大于2！")
+                        return
+                    else:
+                        reality, ideal = t(n, self.normalization.isChecked())
                 elif self.chooseDistribution.currentText() == 'F':
-                    reality, ideal = f(n, self.normalization.isChecked())
+                    if float(self.pro.text()) <= 4:
+                        self.reportError("n2必须大于4")
+                        return
+                    else:
+                        reality, ideal = f(n, float(self.pro.text()), self.normalization.isChecked())
                 dr = Figure_Canvas()
                 # 实例化一个FigureCanvas
                 dr.plot_self(reality, ideal, self.chooseDistribution.currentText())  # 画图
@@ -107,19 +126,26 @@ class MyMainForm(QMainWindow, Ui_MainWindow):
     def setnValue(self):
         self.n_value.setText(str(self.horizontalSlider.value()))
 
-    def setSliderMin(self):
-        if self.rangemin.text() != '':
-            self.sliderMin.setText(self.rangemin.text())
-            self.horizontalSlider.setMinimum(int(self.rangemin.text()))
+    # def setSliderMin(self):
+    #     if self.rangemin.text() != '':
+    #         print("Min:", self.rangemin.text())
+    #         self.sliderMin.setText(self.rangemin.text())
+    #         self.horizontalSlider.setMinimum(int(self.rangemin.text()))
+    #         self.horizontalSlider.setMaximum(int(self.rangemax.text()))
 
-    def setSliderMax(self):
+    def setSliderValue(self):
         if self.rangemax.text() != '':
             self.sliderMax.setText(self.rangemax.text())
             self.horizontalSlider.setMaximum(int(self.rangemax.text()))
 
+        if self.rangemin.text() != '':
+            self.sliderMin.setText(self.rangemin.text())
+            self.horizontalSlider.setMinimum(int(self.rangemin.text()))
+
     def chooseDis(self, text):
         if text == 'Binomial':
             self.label.setText("The range of n:")
+            self.label_4.setText("P")
             self.label_4.show()
             self.pro.show()
 
@@ -136,6 +162,18 @@ class MyMainForm(QMainWindow, Ui_MainWindow):
             self.label.setText("The range of k:")
             self.label_4.hide()
             self.pro.hide()
+        elif text == 'F':
+            self.label.setText("The range of n1:")
+            self.label_4.setText("n2")
+            self.label_4.show()
+            self.pro.show()
+
+    def reportError(self, error):
+        msgBox = QMessageBox()
+        msgBox.setWindowTitle('错误')
+        msgBox.setIcon(QMessageBox.Critical)
+        msgBox.setText(error)
+        msgBox.exec()
 
 
 if __name__ == "__main__":

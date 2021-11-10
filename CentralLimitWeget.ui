@@ -56,6 +56,11 @@
       <string>T</string>
      </property>
     </item>
+    <item>
+     <property name="text">
+      <string>F</string>
+     </property>
+    </item>
    </widget>
    <widget class="QSlider" name="horizontalSlider">
     <property name="geometry">

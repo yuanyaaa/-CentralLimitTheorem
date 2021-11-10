@@ -27,6 +27,7 @@ class Ui_MainWindow(object):
         self.chooseDistribution.addItem("")
         self.chooseDistribution.addItem("")
         self.chooseDistribution.addItem("")
+        self.chooseDistribution.addItem("")
         self.horizontalSlider = QtWidgets.QSlider(self.centralwidget)
         self.horizontalSlider.setGeometry(QtCore.QRect(730, 650, 160, 16))
         self.horizontalSlider.setOrientation(QtCore.Qt.Horizontal)
@@ -100,6 +101,7 @@ class Ui_MainWindow(object):
         self.chooseDistribution.setItemText(1, _translate("MainWindow", "Poisson"))
         self.chooseDistribution.setItemText(2, _translate("MainWindow", "Chi2"))
         self.chooseDistribution.setItemText(3, _translate("MainWindow", "T"))
+        self.chooseDistribution.setItemText(4, _translate("MainWindow", "F"))
         self.normalization.setText(_translate("MainWindow", "标准化"))
         self.label.setText(_translate("MainWindow", "The range of n:"))
         self.label_2.setText(_translate("MainWindow", "-"))
@@ -110,3 +112,13 @@ class Ui_MainWindow(object):
         self.sliderMin.setText(_translate("MainWindow", "0"))
         self.sliderMax.setText(_translate("MainWindow", "0"))
         self.menu.setTitle(_translate("MainWindow", "中心极限定理"))
+
+
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    MainWindow = QtWidgets.QMainWindow()
+    ui = Ui_MainWindow()
+    ui.setupUi(MainWindow)
+    MainWindow.show()
+    sys.exit(app.exec_())
