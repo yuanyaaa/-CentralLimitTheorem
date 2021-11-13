@@ -52,9 +52,18 @@ def poisson(lambda_, isChecked):
     x_min = lambda_ - 9 * np.sqrt(lambda_)
     x_max = lambda_ + 9 * np.sqrt(lambda_)
 
-    x_reality = np.linspace(x_min, x_max, int(18 * np.sqrt(lambda_)))
-
-    sample = np.power(lambda_, x_reality) * np.exp(-lambda_) / factorial(x_reality)
+    x_reality = np.linspace(x_min, x_max, int(9 * np.sqrt(lambda_)))
+    sample = []
+    for i_ in x_reality:
+        tmp = np.exp(-lambda_)
+        if i_ <= 0:
+            sample.append(0)
+        else:
+            for index_ in range(1, int(i_)+1):
+                tmp = tmp * lambda_ / index_
+            sample.append(tmp)
+    sample = np.array(sample).flatten()
+    # sample = np.power(lambda_, x_reality) * np.exp(-lambda_) / factorial(x_reality)
     # print(sample)
     if isChecked:
         x_reality = [(x - lambda_) / np.sqrt(lambda_) for x in x_reality]

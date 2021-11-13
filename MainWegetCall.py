@@ -71,7 +71,7 @@ class MyMainForm(QMainWindow, Ui_MainWindow):
                     reality, ideal = f(self.horizontalSlider.value(), int(self.pro.text()), self.normalization.isChecked())
             dr = Figure_Canvas()
             # 实例化一个FigureCanvas
-            dr.plot_self(reality, ideal, self.chooseDistribution.currentText())  # 画图
+            dr.plot_self(reality, ideal, self.chooseDistribution.currentText(), self.normalization.isChecked())  # 画图
             graphicscene = QtWidgets.QGraphicsScene()  # 第三步，创建一个QGraphicsScene，因为加载的图形（FigureCanvas）不能直接放到graphicview控件中，必须先放到graphicScene，然后再把graphicscene放到graphicview中
             graphicscene.addWidget(dr)  # 第四步，把图形放到QGraphicsScene中，注意：图形是作为一个QWidget放到QGraphicsScene中的
             self.graphicsView.setScene(graphicscene)  # 第五步，把QGraphicsScene放入QGraphicsView
@@ -115,7 +115,7 @@ class MyMainForm(QMainWindow, Ui_MainWindow):
                         reality, ideal = f(n, float(self.pro.text()), self.normalization.isChecked())
                 dr = Figure_Canvas()
                 # 实例化一个FigureCanvas
-                dr.plot_self(reality, ideal, self.chooseDistribution.currentText())  # 画图
+                dr.plot_self(reality, ideal, self.chooseDistribution.currentText(), self.normalization.isChecked())  # 画图
                 graphicscene = QtWidgets.QGraphicsScene()  # 第三步，创建一个QGraphicsScene，因为加载的图形（FigureCanvas）不能直接放到graphicview控件中，必须先放到graphicScene，然后再把graphicscene放到graphicview中
                 graphicscene.addWidget(dr)  # 第四步，把图形放到QGraphicsScene中，注意：图形是作为一个QWidget放到QGraphicsScene中的
                 self.graphicsView.setScene(graphicscene)  # 第五步，把QGraphicsScene放入QGraphicsView
@@ -155,11 +155,11 @@ class MyMainForm(QMainWindow, Ui_MainWindow):
             self.pro.hide()
 
         elif text == 'Chi2':
-            self.label.setText("The range of k:")
+            self.label.setText("The range of n:")
             self.label_4.hide()
             self.pro.hide()
         elif text == 'T':
-            self.label.setText("The range of k:")
+            self.label.setText("The range of n:")
             self.label_4.hide()
             self.pro.hide()
         elif text == 'F':
